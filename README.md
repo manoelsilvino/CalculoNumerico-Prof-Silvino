@@ -1,5 +1,9 @@
-# hello-world
-first( almost ) test 
+# CalculoNumerico-Prof-Silvino
 
-This is a first modification into de file
-Let's try to improve it for more complex projects.
+Este repositório tem o objetivo de disponibilizar códigos para o estudo
+de programação em Cálcuo numérico.
+
+Podem ser sugeridos códigos diversos para a aplicação de técnicas numéricas
+clássicas.
+
+Os códigos serão escritos em GNU Octave e/ou em C++
