@@ -1,6 +1,8 @@
 {
     "files.associations": {
-        "probCavidade2D.C": "cpp"
+        "probCavidade2D.C": "cpp",
+        "string_view": "cpp",
+        "UPWIND.C": "cpp"
     },
     "editor.rulers": [80]
 }
