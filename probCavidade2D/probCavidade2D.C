@@ -194,8 +194,8 @@ int main()
          // - volumes adjacentes aos contornos
          // - PAREDE INFERIOR
 
-        // #include "bottomWall.H"
-        // #include "topWall.H"
+        #include "bottomWall.H"
+        #include "topWall.H"
         // #include "leftWall.H"
         // #include "rightWall.H"
 
@@ -216,20 +216,25 @@ int main()
                 // calcula a contribuicao dos fluxos difusivos nas faces
                 
                 // face N
-                U[I][J+(Nx-1)] += ((mu*dx*dt)/dy);
-                U[I][J] -= ((mu*dx*dt)/dy);
+
+                J = (j+1)*(Nx-1)+i-1;
+                U[I][J] += ((mu*dx*dt)/dy);
+                U[I][I] += (-(mu*dx*dt)/dy);
 
                 // face S
-                U[I][J-(Nx-1)] += ((mu*dx*dt)/dy);
-                U[I][J] +=((-mu*dx*dt)/dy);
+                J = (j-1)*(Nx-1)+i-1;
+                U[I][J] += ((mu*dx*dt)/dy);
+                U[I][I] +=((-mu*dx*dt)/dy);
 
                 //face W 
-                U[I][J]  +=((-mu*dy*dt)/dx);
-                U[I-1][J] += ((mu*dy*dt)/dx);
+                J = j*(Nx-1)+i-2;//i-1-1
+                U[I][I]  +=((-mu*dy*dt)/dx);
+                U[I][J] += ((mu*dy*dt)/dx);
 
-                //face E
-                U[I][J]   += ((-mu*dy*dt))/dx;
-                U[I+1][J] +=((mu*dy*dt)/dx);
+                //face E 
+                J = j*(Nx-1)+i;//i+1-1
+                U[I][I]   += ((-mu*dy*dt))/dx;
+                U[I][J]   += ((mu*dy*dt)/dx);
 
                 // termo fornte relativo a pressao
                 S[I] += ( (p[i-1][j] - p[i][j])/dx );
