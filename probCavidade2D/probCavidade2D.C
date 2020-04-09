@@ -28,7 +28,7 @@ int main()
     double t_final = 3e-3;
     
     // numero de volumes em cada direção
-    int Nx = 3;
+    int Nx = 4;
     int Ny = 3;
     
     double velTampa = 0.2;
@@ -200,7 +200,7 @@ int main()
         // #include "rightWall.H"
 
 
-        for (int i = 1; i < Nx-2; i++)
+        for (int i = 2; i < Nx-1; i++)
         {
             for(int j = 1; j < Ny-1; j++)
             {
