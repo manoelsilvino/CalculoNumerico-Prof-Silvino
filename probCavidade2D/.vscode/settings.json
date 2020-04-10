@@ -2,7 +2,9 @@
     "files.associations": {
         "probCavidade2D.C": "cpp",
         "string_view": "cpp",
-        "UPWIND.C": "cpp"
+        "UPWIND.C": "cpp",
+        "teste.C": "cpp",
+        "VolumesUinternos.C": "cpp"
     },
     "editor.rulers": [80]
 }

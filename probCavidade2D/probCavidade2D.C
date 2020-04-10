@@ -38,7 +38,7 @@ int main()
     double dx   = comprimentoL/Nx ;
     double dy   = alturaH/Ny ;
 
-// fluxos nas faces
+    // fluxos nas faces
     double flux_N;
     double flux_S;
     double flux_W;
@@ -119,7 +119,7 @@ int main()
 
     // matriz para a solucao de u-momentum
     
-    double **U;
+    double **U=NULL;
 
     int dim_U = (Nx-1)*Ny;
     U = new double* [dim_U];
@@ -134,6 +134,13 @@ int main()
         {
             U[i][j]= 0.0;
         }
+    }
+    // termo fonte
+    double* Su;
+    Su = new double[dim_U];
+    for(int i = 0; i < dim_U; i++)
+    {
+        Su[i] = 0.0;
     }
 
     // matriz para a solucao de v-momentum
@@ -170,84 +177,38 @@ int main()
         }
     }
 
-
     // termo fonte
-    double* S;
-    S = new double[dim_U];
-    for(int i = 0; i < dim_U; i++)
+    double* Sv;
+    Sv = new double[dim_V];
+    for(int i = 0; i < dim_V; i++)
     {
-        S[i] = 0.0;
+        Sv[i] = 0.0;
     }
 
 
-     // loop no tempo
-     int I; // indices das matrizes de solucao
-     int J;
+    
 
-     for(t = dt; t< t_final; t+=dt)
+
+     // loop no tempo
+     int I=0; // indices das matrizes de solucao
+     int J=0;
+
+    for(t = dt; t< t_final; t+=dt)
      {
          cout << "\n==============\n \t t = "<< t
               << "\n==============\n ";
          // -- atualizar a matriz U
          // percorrendo todos os volumes de controle u
 
-         // - volumes adjacentes aos contornos
-         // - PAREDE INFERIOR
+         #include "topWallU.H"
+         #include "bottomWallU.H"
+         #include "leftWallU.H"
+         #include "rightWallU.H"
 
-        #include "bottomWall.H"
-        #include "topWall.H"
-        // #include "leftWall.H"
-        // #include "rightWall.H"
-
-
-        for (int i = 2; i < Nx-1; i++)
-        {
-            for(int j = 1; j < Ny-1; j++)
-            {
-                I = j*(Nx-1)+i-1;
-                cout << "volume :"<< I << endl;
-                J = I;
-                S[I] += (-u[i][j]*rho*dx*dy); // u do tempo anterior
-
-                U[I][I] += (-rho*dx*dy);
-                // calcula os fluxos convectivos nas faces (upwind)
-                #include "UPWIND.H"
-
-                // calcula a contribuicao dos fluxos difusivos nas faces
-                
-                // face N
-
-                J = (j+1)*(Nx-1)+i-1;
-                U[I][J] += ((mu*dx*dt)/dy);
-                U[I][I] += (-(mu*dx*dt)/dy);
-
-                // face S
-                J = (j-1)*(Nx-1)+i-1;
-                U[I][J] += ((mu*dx*dt)/dy);
-                U[I][I] +=((-mu*dx*dt)/dy);
-
-                //face W 
-                J = j*(Nx-1)+i-2;//i-1-1
-                U[I][I]  +=((-mu*dy*dt)/dx);
-                U[I][J] += ((mu*dy*dt)/dx);
-
-                //face E 
-                J = j*(Nx-1)+i;//i+1-1
-                U[I][I]   += ((-mu*dy*dt))/dx;
-                U[I][J]   += ((mu*dy*dt)/dx);
-
-                // termo fornte relativo a pressao
-                S[I] += ( (p[i-1][j] - p[i][j])/dx );
-                
-            }
-        }
+         #include "volumesUinternosU.H"
+        
      }
-     
-    
-
-
-
-   
+        
    return 0;
     
 }
