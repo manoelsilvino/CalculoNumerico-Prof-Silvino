@@ -29,7 +29,7 @@ int main()
     
     // numero de volumes em cada direção
     int Nx = 4;
-    int Ny = 3;
+    int Ny = 4;
     
     double velTampa = 0.2;
     double comprimentoL = 1;
@@ -193,8 +193,9 @@ int main()
      int I=0; // indices das matrizes de solucao
      int J=0;
 
-    for(t = dt; t< t_final; t+=dt)
+    for(t = dt; t<t_final; t+=dt)
      {
+         
          cout << "\n==============\n \t t = "<< t
               << "\n==============\n ";
          // -- atualizar a matriz U
@@ -207,6 +208,12 @@ int main()
 
          #include "volumesUinternosU.H"
         
+         #include "rightWall_V.H"
+         #include "leftWall_V.H"
+         #include "bottomWall_V.H"
+         #include "topWall_V.H"
+
+         #include "volumesInternosV.H"
      }
         
    return 0;

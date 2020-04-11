@@ -4,7 +4,8 @@
         "string_view": "cpp",
         "UPWIND.C": "cpp",
         "teste.C": "cpp",
-        "VolumesUinternos.C": "cpp"
+        "VolumesUinternos.C": "cpp",
+        "random": "cpp"
     },
     "editor.rulers": [80]
 }
