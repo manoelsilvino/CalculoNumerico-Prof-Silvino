@@ -132,6 +132,7 @@ int main()
     double* bU;
     double* eU;
     double* fU;
+    double* Su;
 
     int dim_U = (Nx-1)*Ny;
 
@@ -140,10 +141,12 @@ int main()
     eU = new double [dim_U-1];
     aU = new double [dim_U-Nx+1];
     fU = new double [dim_U-Nx+1];
+    Su = new double[dim_U];
 
     for (int i = 0; i < dim_U; i++)
     {
         dU[i] = 0.0;
+        Su[i] = 0.0;
     }
     for (int i = 0; i < (dim_U-1); i++)
     {
@@ -156,75 +159,73 @@ int main()
         fU[i] = 0.0;
     }
 
-    // termo fonte
-    double* Su;
-    Su = new double[dim_U];
-    for(int i = 0; i < dim_U; i++)
-    {
-        Su[i] = 0.0;
-    }
-
+    
     // matriz para a solucao de v-momentum
-    double** V;
     int dim_V = Nx*(Ny-1);
-
-    V = new double* [dim_V];
-    for (int i = 0; i <dim_V ; i++)
-    {
-        V[i] = new double [dim_V];
-    }
-    for(int i = 0; i<dim_V; i++)
-    {
-        for(int j = 0; j<dim_V; j++)
-        {
-            V[i][j]= 0.0;
-        }
-    }
-    // termo fonte
+    double* dV;
+    double* aV;
+    double* bV;
+    double* eV;
+    double* fV;
     double* Sv;
-    Sv = new double[dim_V];
-    for(int i = 0; i < dim_V; i++)
+
+    dV  =   new double [dim_V];
+    Sv  =   new double [dim_V];
+    aV  =   new double [dim_V - Nx+1];
+    bV  =   new double [dim_V-1];
+    eV  =   new double [dim_V-1];
+    fV  =   new double [dim_V - Nx+1];
+    
+    for (int i = 0; i < dim_V; i++)
     {
+        dV[i] = 0.0;
         Sv[i] = 0.0;
     }
-
+    for (int i = 0; i < (dim_V-1); i++)
+    {
+        bV[i] = 0.0;
+        eV[i] = 0.0;
+    }
+    for (int i = 0; i < (dim_V- Nx+1); i++)
+    {
+        aV[i] = 0.0;
+        fV[i] = 0.0;
+    }
+    
     // matriz para a solucao de pressao. SOMENTE AS DIAGONAIS
-    double* diagP;
-    double* inf_diagP;
-    double* infinf_diagP;
-    double* up_diagP;
-    double* upup_diagP;
+    double* dP;
+    double* aP;
+    double* bP;
+    double* eP;
+    double* fP;
     double* Sp ; // termo fonte da pressao
 
     int dim_P = Nx*Ny;
 
-    diagP   = new double [dim_P];
+    dP      = new double [dim_P];
     Sp      = new double [dim_P];
 
-    inf_diagP       = new double [dim_P-1];
-    infinf_diagP    = new double [dim_P-1];
-    up_diagP        = new double [dim_P-1];
-    upup_diagP      = new double [dim_P-1];
+    aP      = new double [dim_P-Nx+1];
+    bP      = new double [dim_P-1];
+    eP      = new double [dim_P-1];
+    fP      = new double [dim_P-Nx+1];
 
-    for (int i = 0; i <Nx ; i++)
-    {
-        for(int j = 0; j < Ny; j++)
-        {
-            int I = j*Nx + i;
-            diagP[I]    = 0.0;
-            Sp[I]       = 0.0;
-        }
-    }
     
+    for(int i = 0; i<(dim_P); i++)
+    {
+        dP [i]  = 0.0;
+        Sp[i]   = 0.0;
+    }
     for(int i = 0; i<(dim_P-1); i++)
     {
-        inf_diagP [i]   = 0.0;
-        infinf_diagP[i] = 0.0;
-        up_diagP[i]     = 0.0;
-        upup_diagP[i]      = 0.0;
+        bP [i]  = 0.0;
+        eP[i]   = 0.0;
     }
-
-
+    for(int i = 0; i<(dim_P-Nx+1); i++)
+    {
+        aP [i]  = 0.0;
+        fP[i]   = 0.0;
+    }
      // loop no tempo
      int I=0; // indices das matrizes de solucao
      //int J=0;
@@ -257,26 +258,14 @@ int main()
               Ny
           );
         
-        //  #include "rightWall_V.H"
-        //  #include "leftWall_V.H"
-        //  #include "bottomWall_V.H"
-        //  #include "topWall_V.H"
+          #include "rightWall_V.H"
+          #include "leftWall_V.H"
+          #include "bottomWall_V.H"
+          #include "topWall_V.H"
+          #include "volumesInternosV.H"
 
-        //  #include "volumesInternosV.H"
-
-         // atualiza os elementos da matriz para o calculo da pressao
-         for (int i = 0; i <dim_P ; i++)
-         {
-            diagP[i]    = 0.0;
-            Sp[i]       = 0.0;
-         }
-         for(int i = 0; i<(dim_P-1); i++)
-         {
-            inf_diagP [i]   = 0.0;
-            infinf_diagP[i] = 0.0;
-            up_diagP[i]     = 0.0;
-            upup_diagP[i]   = 0.0;
-         }
+         // atualizar os elementos da matriz para o calculo da pressao
+         
 
      }
         

@@ -87,7 +87,7 @@ void PGS
     }
 
 
-    for(int i = 0; i < Nx; i++)
+    for(int i = 0; i < Nx+1; i++)
     for(int j = 0; j<Ny; j++)
     {
         cout << "u["<< i <<"]["<<j<<"]="<< phi[i][j] << endl;
