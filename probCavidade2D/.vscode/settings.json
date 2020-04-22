@@ -5,7 +5,8 @@
         "UPWIND.C": "cpp",
         "teste.C": "cpp",
         "VolumesUinternos.C": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "PGS.C": "cpp"
     },
     "editor.rulers": [80]
 }

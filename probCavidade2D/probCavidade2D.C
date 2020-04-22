@@ -14,6 +14,7 @@
 
 
 #include <iostream>
+#include "PGS.H"
 
 using namespace std;
 
@@ -242,6 +243,19 @@ int main()
           #include "leftWallU.H"
           #include "rightWallU.H"
           #include "volumesUinternosU.H"
+
+          // solve u-momentum
+          PGS
+          (
+              u,aU,bU,dU,eU,fU,Su,
+              dim_U-Nx+1,
+              dim_U-1,
+              dim_U,
+              dim_U-1,
+              dim_U-Nx+1,
+              Nx,
+              Ny
+          );
         
         //  #include "rightWall_V.H"
         //  #include "leftWall_V.H"
