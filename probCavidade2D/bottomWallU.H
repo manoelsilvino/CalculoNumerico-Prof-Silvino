@@ -4,48 +4,20 @@ for(int i = 1; i < Nx ; i++)
 
     I = j*(Nx-1)+i-1;
     cout << "volume :"<< I << endl;
-    J = I;
+    //J = I;
     Su[I] += (-u[i][j]*rho*dx*dy); // u do tempo anterior
 
-    U[I][I] += (-rho*dx*dy);
+    dU[I] += (-rho*dx*dy);
     // calcula os fluxos convectivos nas faces (upwind)
     #include "UPWIND.H"
 
     // calcula a contribuicao dos fluxos difusivos nas faces
     
-        // face N
 
-    J = (j+1)*(Nx-1)+i-1;
-    if((J>0) && (J<dim_U))
-    {
-        U[I][J] += ((mu*dx*dt)/dy);
-    }
-    
-    U[I][I] += (-(mu*dx*dt)/dy);
-
-    // face S
-    J = (j-1)*(Nx-1)+i-1;
-    if((J>0) && (J<dim_U))
-    {
-        U[I][J] += ((mu*dx*dt)/dy); // =zero
-    }
-    U[I][I] +=((-2*mu*dx*dt)/dy);
-
-    //face W 
-    J = j*(Nx-1)+i-2;//i-1-1
-    if((J>0) && (J<dim_U))
-    {
-        U[I][I]  +=((-mu*dy*dt)/dx);
-    }
-    U[I][J] += ((mu*dy*dt)/dx);
-
-    //face E 
-    J = j*(Nx-1)+i;//i+1-1;
-    if((J>0) && (J<dim_U))
-    {
-        U[I][J]   += ((mu*dy*dt)/dx);
-    }
-    U[I][I]   += ((-mu*dy*dt))/dx;
+    dU[I]       += (-mu*(3*(dx/dy) + 2*(dy/dx)))*dt;
+    fU[I]       += mu*(dx/dy)*dt;
+    bU[I-1]     += mu*(dy/dx)*dt;
+    eU[I]       += mu*(dy/dx)*dt;
     
 
     // termo fornte relativo a pressao

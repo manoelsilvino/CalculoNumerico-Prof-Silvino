@@ -30,13 +30,18 @@ int main()
     // numero de volumes em cada direção
     int Nx = 4;
     int Ny = 4;
+    if( (Nx<=1)||(Ny<=1))
+    {
+        cerr << "ERRO: Nx e Nx devem ser maior que 1 "<< endl;
+        return 11;
+    }
     
     double velTampa = 0.2;
     double comprimentoL = 1;
     double alturaH      = 1;
     
-    double dx   = comprimentoL/Nx ;
-    double dy   = alturaH/Ny ;
+    double dx   = comprimentoL/(Nx-1) ;
+    double dy   = alturaH/(Ny-1) ;
 
     // fluxos nas faces
     double flux_N;
@@ -117,24 +122,39 @@ int main()
     }
 
 
-    // matriz para a solucao de u-momentum
+    // diagonais da matriz para a solucao de u-momentum
+    // as diagonais sao ordenada de baixo para cima como aU;bU,  dU, eU e fU;
+    // sendo dU a diagonal princiapal
     
-    double **U=NULL;
+    double* dU;
+    double* aU;
+    double* bU;
+    double* eU;
+    double* fU;
 
     int dim_U = (Nx-1)*Ny;
-    U = new double* [dim_U];
-    for (int i = 0; i < dim_U; i++)
-    {
-        U[i] = new double [dim_U];
-    }
+
+    dU = new double [dim_U];
+    bU = new double [dim_U-1];
+    eU = new double [dim_U-1];
+    aU = new double [dim_U-Nx+1];
+    fU = new double [dim_U-Nx+1];
 
     for (int i = 0; i < dim_U; i++)
     {
-        for(int j = 0; j < dim_U; j++)
-        {
-            U[i][j]= 0.0;
-        }
+        dU[i] = 0.0;
     }
+    for (int i = 0; i < (dim_U-1); i++)
+    {
+        bU[i] = 0.0;
+        eU[i] = 0.0;
+    }
+    for (int i = 0; i < (dim_U- Nx+1); i++)
+    {
+        aU[i] = 0.0;
+        fU[i] = 0.0;
+    }
+
     // termo fonte
     double* Su;
     Su = new double[dim_U];
@@ -159,24 +179,6 @@ int main()
             V[i][j]= 0.0;
         }
     }
-
-    // matriz para a solucao de pressao
-    double** P;
-    int dim_P = Nx*Ny;
-
-    V = new double* [dim_P];
-    for (int i = 0; i <dim_P ; i++)
-    {
-        V[i] = new double [dim_P];
-    }
-    for(int i = 0; i<dim_P; i++)
-    {
-        for(int j = 0; j<dim_P; j++)
-        {
-            V[i][j]= 0.0;
-        }
-    }
-
     // termo fonte
     double* Sv;
     Sv = new double[dim_V];
@@ -185,13 +187,46 @@ int main()
         Sv[i] = 0.0;
     }
 
+    // matriz para a solucao de pressao. SOMENTE AS DIAGONAIS
+    double* diagP;
+    double* inf_diagP;
+    double* infinf_diagP;
+    double* up_diagP;
+    double* upup_diagP;
+    double* Sp ; // termo fonte da pressao
 
+    int dim_P = Nx*Ny;
+
+    diagP   = new double [dim_P];
+    Sp      = new double [dim_P];
+
+    inf_diagP       = new double [dim_P-1];
+    infinf_diagP    = new double [dim_P-1];
+    up_diagP        = new double [dim_P-1];
+    upup_diagP      = new double [dim_P-1];
+
+    for (int i = 0; i <Nx ; i++)
+    {
+        for(int j = 0; j < Ny; j++)
+        {
+            int I = j*Nx + i;
+            diagP[I]    = 0.0;
+            Sp[I]       = 0.0;
+        }
+    }
     
+    for(int i = 0; i<(dim_P-1); i++)
+    {
+        inf_diagP [i]   = 0.0;
+        infinf_diagP[i] = 0.0;
+        up_diagP[i]     = 0.0;
+        upup_diagP[i]      = 0.0;
+    }
 
 
      // loop no tempo
      int I=0; // indices das matrizes de solucao
-     int J=0;
+     //int J=0;
 
     for(t = dt; t<t_final; t+=dt)
      {
@@ -200,20 +235,35 @@ int main()
               << "\n==============\n ";
          // -- atualizar a matriz U
          // percorrendo todos os volumes de controle u
+                
 
-         #include "topWallU.H"
-         #include "bottomWallU.H"
-         #include "leftWallU.H"
-         #include "rightWallU.H"
-
-         #include "volumesUinternosU.H"
+          #include "topWallU.H"
+          #include "bottomWallU.H"
+          #include "leftWallU.H"
+          #include "rightWallU.H"
+          #include "volumesUinternosU.H"
         
-         #include "rightWall_V.H"
-         #include "leftWall_V.H"
-         #include "bottomWall_V.H"
-         #include "topWall_V.H"
+        //  #include "rightWall_V.H"
+        //  #include "leftWall_V.H"
+        //  #include "bottomWall_V.H"
+        //  #include "topWall_V.H"
 
-         #include "volumesInternosV.H"
+        //  #include "volumesInternosV.H"
+
+         // atualiza os elementos da matriz para o calculo da pressao
+         for (int i = 0; i <dim_P ; i++)
+         {
+            diagP[i]    = 0.0;
+            Sp[i]       = 0.0;
+         }
+         for(int i = 0; i<(dim_P-1); i++)
+         {
+            inf_diagP [i]   = 0.0;
+            infinf_diagP[i] = 0.0;
+            up_diagP[i]     = 0.0;
+            upup_diagP[i]   = 0.0;
+         }
+
      }
         
    return 0;
