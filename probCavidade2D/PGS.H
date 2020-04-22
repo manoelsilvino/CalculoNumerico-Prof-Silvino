@@ -63,7 +63,7 @@ void PGS
 
     {
         int j = Ny-1;
-        for(int i = 1; i<(Nx-2); i++)
+        for(int i = 1; i<(Nx-1); i++)
         {
             I = j*(Nx-1)+i-1;
             phi[i][j] = ( S_phi[I]
