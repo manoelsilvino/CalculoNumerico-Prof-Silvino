@@ -18,6 +18,29 @@
 
 using namespace std;
 
+int IndexU(int i, int j, int Nx)
+{
+    return
+    (
+        j*(Nx-1)+i-1
+    );
+}
+int IndexV(int i, int j, int Nx)
+{
+    return
+    (
+        (j-1)*Nx+i
+    );
+}
+int IndexP(int i, int j, int Nx)
+{
+    return
+    (
+        j*Nx + i
+    );
+}
+
+
 int main()
 {
     double rho  = 100;
@@ -246,7 +269,7 @@ int main()
           #include "volumesUinternosU.H"
 
           // solve u-momentum
-          PGS
+          PGS_U
           (
               u,aU,bU,dU,eU,fU,Su,
               dim_U-Nx+1,
@@ -255,7 +278,8 @@ int main()
               dim_U-1,
               dim_U-Nx+1,
               Nx,
-              Ny
+              Ny,
+              IndexU
           );
         
           #include "rightWall_V.H"
@@ -263,6 +287,22 @@ int main()
           #include "bottomWall_V.H"
           #include "topWall_V.H"
           #include "volumesInternosV.H"
+
+          // solve v-momentum
+          
+          PGS_V
+          (
+              v,aV,bV,dV,eV,fV,Sv,
+              dim_V-Nx+1,
+              dim_V-1,
+              dim_V,
+              dim_V-1,
+              dim_V-Nx+1,
+              Nx,
+              Ny,
+              IndexV
+          );
+        
 
          // atualizar os elementos da matriz para o calculo da pressao
          
